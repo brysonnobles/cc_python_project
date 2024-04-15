@@ -1,1 +1,8 @@
-This is a test commitment.
+This is where all of the lore and the ideas will be stored.
+
+RULES (in progress):
+> When a player enters the maze, they choose their name, race, and role, which defines their power/health
+>Races to choose from: human, dwarf, elf
+> Roles to choose from: wizard, archer, warrior
+> Stats max out at 10, if health reaches 0, you must restart
+> Must defeat 5 monsters along the way through 5 stages
