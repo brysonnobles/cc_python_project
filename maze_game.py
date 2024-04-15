@@ -32,7 +32,7 @@ class Player:
             self.speed += 7
             self.wisdom += 6
     
-    def assign_role(self, role)
+    def assign_role(self, role):
         if role == 'wizard':
             self.power += 1
             self.speed += 2
@@ -45,6 +45,12 @@ class Player:
             self.power += 3
             self.speed += 1
             self.wisdom += 2
+    
+    def stats(self):
+        print("HEALTH:" + str(self.health))
+        print("POWER:" + str(self.power))
+        print("SPEED:" + str(self.power))
+        print("WISDOM:" + str(self.wisdom))
 
 # When a player encounters a monster, it's chosen at random depending on how far they are in the maze
 ## There are stronger monsters along the way, but defeating them upgrades your player
@@ -113,12 +119,15 @@ while player_role != 'Wizard' or player_race != 'Arhcer' or player_race != 'Warr
 # Ask for name input
 player_name = input("You have stumbled upon the Maze of Monsters. Please provide your adventurer's name before proceeding into the Maze. ")
 
-# Initialize the Maze
+# Initialize the Player & The Maze
+player = Player(player_name)
+player.assign_race(player_race)
+player.assign_role(player_role)
 maze = Maze()
 maze.assign_paths()
 
 # Ask for input to enter into stage one
+print(format("Welcome to the Maze of Monsters, {name}! To check your stats at anytime type 'player.stats'."))
 stage_one = input("To enter the first stage of the Maze of Monsters, please type 'Enter'")
 while stage_one != 'Enter':
     stage_one = input("Please type 'Enter' to begin the journey into stage one of the maze.")
-
