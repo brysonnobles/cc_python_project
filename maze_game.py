@@ -73,6 +73,9 @@ class Maze:
         for stage in stages.keys:
             stage.value = random.randint(2,5)
 
+
+species_list = ["empty", "rat", "wolf", "bear", "dragon"]
+
 stat_info = '''
 You have four unique stats to track along your journey:
 Health [0-10]
@@ -92,13 +95,30 @@ Wizard [Power: +1, Speed: +2, Wisdom: +3]
 Archer [Power: +2, Speed: +3, Wisdom: +1]
 Warrior [Power: +3, Speed: +1, Wisdom: +2]
 '''
+# Display all info to get started
 print(stat_info)
 print(race_info)
 print(role_info)
+
+# Ask for race input
 player_race = input("Please choose your race to determine your starting levels for the Maze.")
 while player_race != 'Human' or player_race != 'Dwarf' or player_race != 'Elf':
     player_race = input("Oops! You didn't choose a valid option. Please choose Human, Dwarf, or Elf.")
+
+# Ask for role input
 player_role = input("Please choose your role to determine your additional stats.")
 while player_role != 'Wizard' or player_race != 'Arhcer' or player_race != 'Warrior':
     player_race = input("Oops! You didn't choose a valid option. Please choose Wizard, Archer, or Warrior.")
+
+# Ask for name input
 player_name = input("You have stumbled upon the Maze of Monsters. Please provide your adventurer's name before proceeding into the Maze. ")
+
+# Initialize the Maze
+maze = Maze()
+maze.assign_paths()
+
+# Ask for input to enter into stage one
+stage_one = input("To enter the first stage of the Maze of Monsters, please type 'Enter'")
+while stage_one != 'Enter':
+    stage_one = input("Please type 'Enter' to begin the journey into stage one of the maze.")
+
