@@ -40,28 +40,20 @@ class Player:
             self.power += 3
             self.speed += 1
             self.wisdom += 2
-    
-    def stats(self):
-        print("HEALTH:" + str(self.health))
-        print("POWER:" + str(self.power))
-        print("SPEED:" + str(self.power))
-        print("WISDOM:" + str(self.wisdom))
 
 class Monster:
-    def __init__(self):
-        self.species = ""
-        self.health = 0
-        self.power = 0
-        self.speed = 0
-        self.wisdom = 0
-    
-    def assign_power(self, stage):
-        self.health = random.randint(0+stage, 3+stage)
-        self.power = random.randint(0+stage, 3+stage)
-        self.speed = random.randint(0+stage, 3+stage)
-        self.wisdom = random.randint(0+stage, 3+stage)
-
-# def species
+    def __init__(self, stage):
+        self.species = random.choices(species_list)
+        if self.species == "empty":
+            self.health = 0
+            self.power = 0
+            self.speed = 0
+            self.wisdom = 0
+        else:
+            self.health = random.randint(0+stage, 3+stage)
+            self.power = random.randint(0+stage, 3+stage)
+            self.speed = random.randint(0+stage, 3+stage)
+            self.wisdom = random.randint(0+stage, 3+stage)
 
 class Maze:
     def __init__(self):
@@ -73,7 +65,7 @@ class Maze:
     #     return(stages)
 
 
-species_list = ["empty", "rat", "wolf", "bear", "dragon"]
+species_list = {"empty": 5, "rat": 10, "wolf": 25, "zombie": 25, "bear": 25, "dragon": 10}
 
 stat_info = '''
 You have four unique stats to track along your journey:
@@ -107,7 +99,7 @@ while player_role != 'Wizard' and player_role != 'Archer' and player_role != 'Wa
     player_role = input("Oops! You didn't choose a valid option. Please choose Wizard, Archer, or Warrior. ")
 
 # Ask for name input
-player_name = input("You have stumbled upon the Maze of Monsters. Please provide your adventurer's name before proceeding into the Maze. ")
+player_name = input("You have made it to the Maze of Monsters. Please provide your adventurer's name before proceeding into the Maze. ")
 
 # Initialize the Player & The Maze
 player = Player(player_name)
@@ -118,16 +110,25 @@ maze = Maze()
 paths = maze.paths
 
 # Ask for input to enter into stage one
+# MAKE THIS PROCESS INTO A FOR LOOP FOR EACH OF THE FIVE STAGES
 print(f"Welcome to the Maze of Monsters, {player.name}! You have chosen to be a {player.race} {player.role}. Your current stats are {stats}")
 stage_one = input("To enter the first stage of the Maze of Monsters, please type 'Enter' ")
 while stage_one != 'Enter':
     stage_one = input("Please type 'Enter' to begin the journey into stage one of the maze. ")
-player.stage = 1
+player.stage += 1
 stage_paths = []
 for stage, path in paths.values():
     if stage == player.stage:
         stage_paths.append(path)
-path_choice = input(f"You have encountered your first split in the maze. You must choose one of the following paths: {stage_paths} ")
+path_choice = input(f"You have stumbled upon the first split in the maze. You must choose one of the following paths: {stage_paths} ")
 while path_choice not in stage_paths:
     input("Looks like you've tried to go down an imaginary path. Please choose an option from the provided paths above. ")
 paths.popitem(player.stage, path_choice)
+monster = Monster(player.stage)
+if monster.species == "empty":
+    print("Wow! You found a clear path and can move ahead to the next stage easy peasy.")
+    player.health += 3
+else:
+    action = input(f"Oh my, you've encountered a {monster.species} [H: {monster.health} / P: {monster.power} / S: {monster.speed} / W: {monster.wisdom}! Will you 'fight' or 'run'?")
+    while action != 'fight' and action != 'run':
+        action = input("Please choose a valid option. Type 'fight' or 'run' to proceed.")
