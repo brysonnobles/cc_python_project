@@ -132,3 +132,24 @@ else:
     action = input(f"Oh my, you've encountered a {monster.species} [H: {monster.health} / P: {monster.power} / S: {monster.speed} / W: {monster.wisdom}! Will you 'fight' or 'run'?")
     while action != 'fight' and action != 'run':
         action = input("Please choose a valid option. Type 'fight' or 'run' to proceed.")
+    if action == 'fight':
+        if player.power > monster.power:
+            print("Congratulations! You have defeated the monster and entered the next stage.")
+        elif player.wisdom > monster.wisdom:
+            print(f"Whew! You defeated the monster, but were injured. You've lost {round(monster.power/2)} health, but have entered the next stage")
+            player.health -= round(monster.power/2)
+        else:
+            print("Oof, looks like the monster has vanquished you. Try to defeat the maze another day!")
+            player.health = 0
+    else:
+        if player.speed > monster.speed:
+            print("You escaped to the previous stage! You'll need to choose a new path.")
+            player.stage -= 1
+        elif player.wisdom > monster.wisdom:
+            print(f"You narrowly escaped to the previous stage, but lost {round(monster.power/2)} health in the process.")
+            player.health -= round(monster.power/2)
+        else:
+            print(f"Somehow you escaped, but the monster did some damage and you lost {monster.power} health.")
+            player.health -= monster.power
+        
+        
