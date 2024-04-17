@@ -111,7 +111,7 @@ paths = maze.paths
 
 # Ask for input to enter into stage one
 # MAKE THIS PROCESS INTO A FOR LOOP FOR EACH OF THE FIVE STAGES
-print(f"Welcome to the Maze of Monsters, {player.name}! You have chosen to be a {player.race} {player.role}. Your current stats are {stats}")
+print(f"Welcome to the Maze of Monsters, {player.name}! You have chosen to be a {player.race} {player.role}. Your current stats are: {stats}")
 stage_one = input("To enter the first stage of the Maze of Monsters, please type 'Enter' ")
 while stage_one != 'Enter':
     stage_one = input("Please type 'Enter' to begin the journey into stage one of the maze. ")
@@ -133,23 +133,30 @@ else:
     while action != 'fight' and action != 'run':
         action = input("Please choose a valid option. Type 'fight' or 'run' to proceed.")
     if action == 'fight':
+        next_stage = player.stage + 1
         if player.power > monster.power:
             print("Congratulations! You have defeated the monster and entered the next stage.")
         elif player.wisdom > monster.wisdom:
             print(f"Whew! You defeated the monster, but were injured. You've lost {round(monster.power/2)} health, but have entered the next stage")
             player.health -= round(monster.power/2)
         else:
-            print("Oof, looks like the monster has vanquished you. Try to defeat the maze another day!")
+            print("Oof, looks like you don't have the power or wisdom to defeat the monster.")
             player.health = 0
     else:
+        next_stage = player.stage - 1
         if player.speed > monster.speed:
             print("You escaped to the previous stage! You'll need to choose a new path.")
-            player.stage -= 1
         elif player.wisdom > monster.wisdom:
             print(f"You narrowly escaped to the previous stage, but lost {round(monster.power/2)} health in the process.")
             player.health -= round(monster.power/2)
         else:
             print(f"Somehow you escaped, but the monster did some damage and you lost {monster.power} health.")
             player.health -= monster.power
-        
-        
+if player.health == 0:
+    print("Unfortunately, you've been slain in the Maze of Monsters. Try again another day!")
+elif next_stage > player.stage: 
+    player.stage = next_stage
+    print(f"You've made it to stage {player.stage} and your current stats are: {stats}.")
+else:
+    player.stage = next_stage
+    print(f"Bummer you had to run away, but you can still progress on a new path! Your current stats are: {stats}.")
