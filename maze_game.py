@@ -57,12 +57,16 @@ class Monster:
 
 class Maze:
     def __init__(self):
-        self.stages = [1,2,3,4,5]
-        self.paths = { stage: random.randint(2,5) for stage in self.stages }
+        self.stages = {1: [], 2: [], 3:[], 4:[], 5:[]}
+        # self.stages = { stage: random.randint(2,5) for stage in [1,2,3,4,5] }
 
-    # def assign_paths(self):
-    #     stages = { stage: random.randint(2,5) for stage in self.stages }
-    #     return(stages)
+    def assign_paths(self, player_stage):
+        stages = self.stages
+        options = random.randint(2,5)
+        for stage, paths in stages.items():
+            if stage == player_stage:
+                for num in options:
+                    paths.append(num)
 
 
 species_list = {"empty": 5, "rat": 10, "wolf": 25, "zombie": 25, "bear": 25, "dragon": 10}
@@ -107,7 +111,7 @@ player.assign_race(player_race)
 player.assign_role(player_role)
 stats = f"Health: {player.health} / Power: {player.power} / Speed: {player.speed} / Wisdom: {player.wisdom}"
 maze = Maze()
-paths = maze.paths
+print(maze.stages)
 
 # Ask for input to enter into stage one
 # MAKE THIS PROCESS INTO A FOR LOOP FOR EACH OF THE FIVE STAGES
@@ -116,12 +120,11 @@ stage_one = input("To enter the first stage of the Maze of Monsters, please type
 while stage_one != 'Enter':
     stage_one = input("Please type 'Enter' to begin the journey into stage one of the maze. ")
 player.stage += 1
-stage_paths = []
-for stage, path in paths.values():
-    if stage == player.stage:
-        stage_paths.append(path)
-path_choice = input(f"You have stumbled upon the first split in the maze. You must choose one of the following paths: {stage_paths} ")
-while path_choice not in stage_paths:
+maze.assign_paths(player.stage)
+stages = maze.stages
+paths = stages[player.stage]
+path_choice = input(f"You have stumbled upon the first split in the maze. You must choose one of the following paths: {paths} ")
+while path_choice not in paths:
     input("Looks like you've tried to go down an imaginary path. Please choose an option from the provided paths above. ")
 paths.popitem(player.stage, path_choice)
 monster = Monster(player.stage)
