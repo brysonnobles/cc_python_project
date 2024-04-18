@@ -23,7 +23,7 @@ GAME FLOW:
     d. if the player chooses to run and has a lower speed and higher wisdom, they lose health equal to half the monster's power, but escape to the previous stage
     e. if the player chooses to run and has a lower speed and lower wisdom, they lose health equal to the monster's power, but escape to the previous stage
 6. If a stage is cleared, the player has the option to increase 3-5 stat points however they'd like before moving to the next stage
-    a. if a monster was killed, you can upgrade 5 stat points and regain 5 health
-    b. if you clear a stage through an easy path, you can upgrade 3 stat points and gain 3 health
+    a. if a monster was killed, you can upgrade 3 stat points and regain 5 health
+    b. if you clear a stage through an easy path, you can upgrade 2 stat points and gain 3 health
 7. After all 5 stages are completed, the player will exit the maze and complete the game successfully
     

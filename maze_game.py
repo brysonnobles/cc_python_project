@@ -58,15 +58,19 @@ class Monster:
 class Maze:
     def __init__(self):
         self.stages = {1: [], 2: [], 3:[], 4:[], 5:[]}
-        # self.stages = { stage: random.randint(2,5) for stage in [1,2,3,4,5] }
-
-    def assign_paths(self, player_stage):
         stages = self.stages
-        options = random.randint(2,5)
-        for stage, paths in stages.items():
-            if stage == player_stage:
-                for num in options:
-                    paths.append(num)
+        for value in stages.values():
+            number = random.randint(2,5)
+            while number > 0:
+                try: 
+                    value.append(number)
+                    number -= 1
+                except:
+                    print("the maze is complete")
+
+    def display_paths(self, player_stage):
+        stages = self.stages
+        return(stages[player_stage])
 
 
 species_list = {"empty": 5, "rat": 10, "wolf": 25, "zombie": 25, "bear": 25, "dragon": 10}
@@ -91,6 +95,7 @@ Warrior [Power: +3, Speed: +1, Wisdom: +2]'''
 print(stat_info)
 print(race_info)
 print(role_info)
+print("-----")
 
 # Ask for race input
 player_race = input("Please choose your race to determine your starting levels for the Maze. ")
@@ -111,7 +116,6 @@ player.assign_race(player_race)
 player.assign_role(player_role)
 stats = f"Health: {player.health} / Power: {player.power} / Speed: {player.speed} / Wisdom: {player.wisdom}"
 maze = Maze()
-print(maze.stages)
 
 # Ask for input to enter into stage one
 # MAKE THIS PROCESS INTO A FOR LOOP FOR EACH OF THE FIVE STAGES
@@ -120,13 +124,12 @@ stage_one = input("To enter the first stage of the Maze of Monsters, please type
 while stage_one != 'Enter':
     stage_one = input("Please type 'Enter' to begin the journey into stage one of the maze. ")
 player.stage += 1
-maze.assign_paths(player.stage)
-stages = maze.stages
-paths = stages[player.stage]
+paths = maze.display_paths(player.stage)
+
 path_choice = input(f"You have stumbled upon the first split in the maze. You must choose one of the following paths: {paths} ")
-while path_choice not in paths:
-    input("Looks like you've tried to go down an imaginary path. Please choose an option from the provided paths above. ")
-paths.popitem(player.stage, path_choice)
+while path_choice in paths == 'False':
+    path_choice = input("Looks like you've tried to go down an imaginary path. Please choose an option from the provided paths above. ")
+paths.pop(int(path_choice) - 1)
 monster = Monster(player.stage)
 if monster.species == "empty":
     print("Wow! You found a clear path and can move ahead to the next stage easy peasy.")
