@@ -45,7 +45,7 @@ class Player:
 
 class Monster:
     def __init__(self, stage):
-        self.species = random.choices(species_list, weights = species_weights, k = 1)
+        self.species = str(random.choices(species_list, weights = species_weights, k = 1))
         if self.species == "empty":
             self.health = 0
             self.power = 0
@@ -128,13 +128,15 @@ maze = Maze()
 # MAKE THIS PROCESS INTO A FOR LOOP FOR EACH OF THE FIVE STAGES
 stats = f"Health: {player.health} / Power: {player.power} / Speed: {player.speed} / Wisdom: {player.wisdom}"
 print(f"Welcome to the Maze of Monsters, {player.name}! You have chosen to be a {player.race} {player.role}. Your current stats are: {stats}")
-stage_one = input("To enter the first stage of the Maze of Monsters, please type 'Enter' ")
-while stage_one != 'Enter':
-    stage_one = input("Please type 'Enter' to begin the journey into stage one of the maze. ")
-player.stage += 1
+enter = input("To enter the first stage of the Maze of Monsters, please type 'Enter' ")
+while enter != 'Enter':
+    enter = input("Please type 'Enter' to begin the journey into stage one of the maze. ")
+player.stage = 1
 next_stage = 0
+
 for stage, paths in maze.stages.items():
     stats = f"Health: {player.health} / Power: {player.power} / Speed: {player.speed} / Wisdom: {player.wisdom}"
+    print(maze.stages)
     if player.stage > len(maze.stages):
         print("You have successfully completed the Maze of Monsters! Go to bed...")
     elif player.health == 0:
@@ -143,15 +145,16 @@ for stage, paths in maze.stages.items():
         player.stage = next_stage
         print(f"You've made it to stage {player.stage} and your current stats are: {stats}.")
     else:
-        paths = maze.display_paths(player.stage)
-        if not paths:
-            print("You coward! Go home...")
-        else:
+        while next_stage > player.stage:
+            player.stage = next_stage
+            print(f"You've made it to stage {player.stage} and your current stats are: {stats}.")
+        
+            paths = maze.display_paths(player.stage)
             # Prompt for stage path splits
-            path_choice = input(f"You have stumbled upon a split in the maze. You must choose one of the following paths: {paths} ")
-            while path_choice in paths == 'False':
+            path_choice = int(input(f"You have stumbled upon a split in the maze. You must choose one of the following paths: {paths} "))
+            while path_choice in paths == 'False' and path_choice != 0:
                 path_choice = input("Looks like you've tried to go down an imaginary path. Please choose an option from the provided paths above. ")
-            paths.pop(paths.index(int(path_choice)))
+            paths.pop(paths.index(path_choice))
 
             # Monster encounter after choosing a path
             monster = Monster(player.stage)
@@ -213,14 +216,18 @@ for stage, paths in maze.stages.items():
                 else:
                     if player.stage == 1:
                         next_stage = player.stage
-                        if player.speed > monster.speed:
-                            print("You escaped to the previous stage! You'll need to choose a new path.")
-                        elif player.wisdom > monster.wisdom:
-                            print(f"You narrowly escaped to the previous stage, but lost {round(monster.power/2)} health in the process.")
-                            player.health -= round(monster.power/2)
+                        if len(paths) != 0:
+                            if player.speed > monster.speed:
+                                print("You escaped to the previous stage! You'll need to choose a new path.")
+                            elif player.wisdom > monster.wisdom:
+                                print(f"You narrowly escaped to the previous stage, but lost {round(monster.power/2)} health in the process.")
+                                player.health -= round(monster.power/2)
+                            else:
+                                print(f"Somehow you escaped, but the monster did some damage and you lost {monster.power} health.")
+                                player.health -= monster.power
                         else:
-                            print(f"Somehow you escaped, but the monster did some damage and you lost {monster.power} health.")
-                            player.health -= monster.power
+                            print("You coward! Go home...")
+                            break
                     else:
                         next_stage = player.stage - 1
                         if player.speed > monster.speed:
