@@ -1,35 +1,25 @@
 import random
 class Player:
-    def __init__(self, name):
+    def __init__(self, name, race, role):
         self.name = name
-        self.race = ""
-        self.role = ""
-        self.health = 0
-        self.power = 0
-        self.speed = 0
-        self.wisdom = 0
-        self.stage = 0
-    
-    def assign_race(self, race):
         self.race = race
-        if race == 'Human':
-            self.health += 6
-            self.power += 4
-            self.speed += 5
-            self.wisdom += 5
-        elif race == 'Dwarf':
-            self.health += 7
-            self.power += 6
-            self.speed += 4
-            self.wisdom += 3
-        elif race == 'Elf':
-            self.health += 4
-            self.power += 3
-            self.speed += 7
-            self.wisdom += 6
-    
-    def assign_role(self, role):
         self.role = role
+        self.stage = 0
+        if race == 'Human':
+            self.health = 6
+            self.power = 4
+            self.speed = 5
+            self.wisdom = 5
+        elif race == 'Dwarf':
+            self.health = 7
+            self.power = 6
+            self.speed = 4
+            self.wisdom = 3
+        elif race == 'Elf':
+            self.health = 4
+            self.power = 3
+            self.speed = 7
+            self.wisdom = 6
         if role == 'Wizard':
             self.power += 1
             self.speed += 2
@@ -42,6 +32,39 @@ class Player:
             self.power += 3
             self.speed += 1
             self.wisdom += 2
+    
+    # def assign_race(self, race):
+    #     self.race = race
+    #     if race == 'Human':
+    #         self.health += 6
+    #         self.power += 4
+    #         self.speed += 5
+    #         self.wisdom += 5
+    #     elif race == 'Dwarf':
+    #         self.health += 7
+    #         self.power += 6
+    #         self.speed += 4
+    #         self.wisdom += 3
+    #     elif race == 'Elf':
+    #         self.health += 4
+    #         self.power += 3
+    #         self.speed += 7
+    #         self.wisdom += 6
+    
+    # def assign_role(self, role):
+    #     self.role = role
+    #     if role == 'Wizard':
+    #         self.power += 1
+    #         self.speed += 2
+    #         self.wisdom += 3
+    #     elif role == 'Archer':
+    #         self.power += 2
+    #         self.speed += 3
+    #         self.wisdom += 1
+    #     elif role == 'Warrior':
+    #         self.power += 3
+    #         self.speed += 1
+    #         self.wisdom += 2
 
 class Monster:
     def __init__(self, stage):
@@ -106,22 +129,22 @@ print(role_info)
 print("-----")
 
 # Ask for race input
-player_race = input("Please choose your race to determine your starting levels for the Maze. ")
+player_race = input("Choose your race: ")
 while player_race != 'Human' and player_race != 'Dwarf' and player_race != 'Elf':
     player_race = input("Oops! You didn't choose a valid option. Please choose Human, Dwarf, or Elf. ")
 
 # Ask for role input
-player_role = input("Please choose your role to determine your additional stats. ")
+player_role = input("Choose your role: ")
 while player_role != 'Wizard' and player_role != 'Archer' and player_role != 'Warrior':
     player_role = input("Oops! You didn't choose a valid option. Please choose Wizard, Archer, or Warrior. ")
 
 # Ask for name input
-player_name = input("You have made it to the Maze of Monsters. Please give your adventurer's name before proceeding into the Maze. ")
+player_name = input("Choose your name: ")
 
 # Initialize the Player & The Maze
-player = Player(player_name)
-player.assign_race(player_race)
-player.assign_role(player_role)
+player = Player(player_name, player_race, player_role)
+# player.assign_race(player_race)
+# player.assign_role(player_role)
 player.stage = 1
 next_stage = 1
 options = 1
@@ -133,7 +156,7 @@ print(f"Welcome to the Maze of Monsters, {player.name} the {player.race} {player
 enter = input("To enter the first stage of the Maze of Monsters, please type 'Enter' ")
 while enter != 'Enter':
     enter = input("Please type 'Enter' to begin the journey into stage one of the maze. ")
-
+print("-----")
 # Looping through each of the 5 stages of the maze
 if player.stage > len(maze.stages):
         print("You have successfully completed the Maze of Monsters! Go to bed...")
@@ -148,7 +171,7 @@ else:
             stats = f"Health: {player.health} / Power: {player.power} / Speed: {player.speed} / Wisdom: {player.wisdom}"
             player.stage = next_stage
             print(f"You've made it to stage {player.stage} and your current stats are: {stats}.")
-            print("-----")
+            print("~~~~~")
             paths = maze.display_paths(player.stage)
             # Prompt for stage path splits
             path_choice = input(f"You have stumbled upon a split in the maze. You must choose one of the following paths: {paths} ") 
@@ -169,25 +192,49 @@ else:
                     action = input("Please choose a valid option. Type 'fight' or 'run' to proceed. ")
                 if action == 'fight':
                     if player.power > monster.power:
-                        print("Congratulations! You have defeated the monster and entered the next stage. You are rewarded with 2 upgrade points. *Gain 2 Health*")
+                        print("Congratulations! You have defeated the monster and entered the next stage. *Gain 2 Health*")
                         player.health += 2
                         up_stats = 2
-                        while up_stats > 0:
-                            power_choice = int(input("How many points would you like to assign to power? "))
-                            while power_choice > 0 and power_choice <= up_stats:
-                                up_stats -= power_choice
-                                player.power += power_choice
-                                break
-                            speed_choice = int(input("How many points would you like to assign to speed? "))
-                            while speed_choice > 0 and speed_choice <= up_stats:
-                                up_stats -= speed_choice
-                                player.speed += speed_choice
-                                break
-                            wisdom_choice = int(input("How many points would you like to assign to wisdom? "))
-                            while wisdom_choice > 0 and wisdom_choice <= up_stats:
-                                up_stats -= wisdom_choice
-                                player.wisdom += wisdom_choice
-                                break
+                        while up_stats != 0:
+                            power_choice = input(f"How many points would you like to assign to power? [{up_stats} left] ")
+                            try: 
+                                number = int(power_choice)
+                                if number >= 0 and number <= up_stats:
+                                    up_stats -= number
+                                    player.power += number
+                                else:
+                                    number = input(f"Please enter a number between 0 and {up_stats}. ")
+                                    up_stats -= number
+                                    player.power += number
+                            except:
+                                print("You have not entered a numerical value.")
+                                continue
+                            speed_choice = input(f"How many points would you like to assign to speed? [{up_stats} left] ")
+                            try: 
+                                number = int(speed_choice)
+                                if number >= 0 and number <= up_stats:
+                                    up_stats -= number
+                                    player.speed += number
+                                else:
+                                    number = input(f"Please enter a number between 0 and {up_stats}. ")
+                                    up_stats -= number
+                                    player.speed += number
+                            except:
+                                print("You have not entered a numerical value.")
+                                continue
+                            wisdom_choice = input(f"How many points would you like to assign to wisdom? [{up_stats} left] ")
+                            try: 
+                                number = int(wisdom_choice)
+                                if number >= 0 and number <= up_stats:
+                                    up_stats -= number
+                                    player.wisdom += number
+                                else:
+                                    number = input(f"Please enter a number between 0 and {up_stats}. ")
+                                    up_stats -= number
+                                    player.wisdom += number
+                            except:
+                                print("You have not entered a numerical value.")
+                                continue
                     elif player.wisdom > monster.wisdom:
                         print(f"Whew! You defeated the monster, but were injured. You've lost {round(monster.power/2)} health, but have entered the next stage and are rewarded with 2 upgrade points.")
                         player.health -= round(monster.power/2)
