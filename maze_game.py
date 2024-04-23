@@ -65,7 +65,7 @@ class Maze:
             number = random.randint(2,5)
             while number > 0:
                 try: 
-                    value.append(number)
+                    value.append(str(number))
                     number -= 1
                 except:
                     print("the maze is complete")
@@ -135,23 +135,23 @@ while enter != 'Enter':
     enter = input("Please type 'Enter' to begin the journey into stage one of the maze. ")
 
 # Looping through each of the 5 stages of the maze
-for stage, paths in maze.stages.items():
-    stats = f"Health: {player.health} / Power: {player.power} / Speed: {player.speed} / Wisdom: {player.wisdom}"
-    if player.stage > len(maze.stages):
+if player.stage > len(maze.stages):
         print("You have successfully completed the Maze of Monsters! Go to bed...")
-    elif player.health == 0:
-        print("Unfortunately, you've been slain in the Maze of Monsters. Try again another day!")
-    elif options == 0: 
-        print("You coward! Go home...")
-        break
-    else:
-        while next_stage >= player.stage:
+else:
+    for stage, paths in maze.stages.items():
+        if player.health == 0:
+            print("Unfortunately, you've been slain in the Maze of Monsters. Try again another day!")
+        elif options == 0: 
+            print("You coward! Go home...")
+            break
+        else:
+            stats = f"Health: {player.health} / Power: {player.power} / Speed: {player.speed} / Wisdom: {player.wisdom}"
             player.stage = next_stage
             print(f"You've made it to stage {player.stage} and your current stats are: {stats}.")
             print("-----")
             paths = maze.display_paths(player.stage)
             # Prompt for stage path splits
-            path_choice = int(input(f"You have stumbled upon a split in the maze. You must choose one of the following paths: {paths} "))
+            path_choice = input(f"You have stumbled upon a split in the maze. You must choose one of the following paths: {paths} ") 
             while path_choice not in paths:
                 path_choice = input("Looks like you've tried to go down an imaginary path. Please choose an option from the provided paths above. ")
             next_stage += 1
@@ -173,35 +173,27 @@ for stage, paths in maze.stages.items():
                         player.health += 2
                         up_stats = 2
                         while up_stats > 0:
-                            try:
-                                print(up_stats)
-                                power_choice = int(input("How many points would you like to assign to power? "))
-                                while power_choice > 0 and power_choice <= up_stats:
-                                    up_stats -= power_choice
-                                    player.power += power_choice
-                                if up_stats == 0:
-                                    break
-                                speed_choice = int(input("How many points would you like to assign to speed? "))
-                                while speed_choice > 0 and power_choice <= up_stats:
-                                    up_stats -= speed_choice
-                                    player.speed += speed_choice
-                                if up_stats == 0:
-                                    break
-                                wisdom_choice = int(input("How many points would you like to assign to wisdom? "))
-                                while wisdom_choice > 0 and power_choice <= up_stats:
-                                    up_stats -= wisdom_choice
-                                    player.wisdom += wisdom_choice
-                                if up_stats == 0:
-                                    break
-                            except:
-                                print("You have used your upgrade points")
+                            power_choice = int(input("How many points would you like to assign to power? "))
+                            while power_choice > 0 and power_choice <= up_stats:
+                                up_stats -= power_choice
+                                player.power += power_choice
+                                break
+                            speed_choice = int(input("How many points would you like to assign to speed? "))
+                            while speed_choice > 0 and speed_choice <= up_stats:
+                                up_stats -= speed_choice
+                                player.speed += speed_choice
+                                break
+                            wisdom_choice = int(input("How many points would you like to assign to wisdom? "))
+                            while wisdom_choice > 0 and wisdom_choice <= up_stats:
+                                up_stats -= wisdom_choice
+                                player.wisdom += wisdom_choice
+                                break
                     elif player.wisdom > monster.wisdom:
                         print(f"Whew! You defeated the monster, but were injured. You've lost {round(monster.power/2)} health, but have entered the next stage and are rewarded with 2 upgrade points.")
                         player.health -= round(monster.power/2)
                         up_stats = 2
                         while up_stats > 0:
                             try:
-                                print(up_stats)
                                 power_choice = int(input("How many points would you like to assign to power? "))
                                 while power_choice > 0 and power_choice <= up_stats:
                                     up_stats -= power_choice
@@ -226,10 +218,10 @@ for stage, paths in maze.stages.items():
                         print("Oof, looks like you don't have the power or wisdom to defeat the monster.")
                         player.health = 0
                 else:
+                    player.stage -= 1
                     if player.stage == 1:
                         next_stage = player.stage
                         if options == 0:
-                            # print("You coward! Go home...")
                             break
                         else:
                             if player.speed > monster.speed:
@@ -252,5 +244,4 @@ for stage, paths in maze.stages.items():
                                 player.health -= round(monster.power/2)
                             else:
                                 print(f"Somehow you escaped, but the monster did some damage and you lost {monster.power} health.")
-                                player.health -= monster.power
-                            
+                                player.health -= monster.power      
