@@ -1,4 +1,5 @@
 import random
+
 class Player:
     def __init__(self, name, race, role):
         self.name = name
@@ -32,39 +33,14 @@ class Player:
             self.power += 3
             self.speed += 1
             self.wisdom += 2
-    
-    # def assign_race(self, race):
-    #     self.race = race
-    #     if race == 'Human':
-    #         self.health += 6
-    #         self.power += 4
-    #         self.speed += 5
-    #         self.wisdom += 5
-    #     elif race == 'Dwarf':
-    #         self.health += 7
-    #         self.power += 6
-    #         self.speed += 4
-    #         self.wisdom += 3
-    #     elif race == 'Elf':
-    #         self.health += 4
-    #         self.power += 3
-    #         self.speed += 7
-    #         self.wisdom += 6
-    
-    # def assign_role(self, role):
-    #     self.role = role
-    #     if role == 'Wizard':
-    #         self.power += 1
-    #         self.speed += 2
-    #         self.wisdom += 3
-    #     elif role == 'Archer':
-    #         self.power += 2
-    #         self.speed += 3
-    #         self.wisdom += 1
-    #     elif role == 'Warrior':
-    #         self.power += 3
-    #         self.speed += 1
-    #         self.wisdom += 2
+
+    def upgrade(self, stat, value):
+        if stat == "Power":
+            self.power += value
+        elif stat == "Speed":
+            self.speed += value
+        elif stat == "Wisdom":
+            self.wisdom += value
 
 class Monster:
     def __init__(self, stage):
@@ -187,7 +163,7 @@ else:
                 print("Wow! You found a clear path and can move ahead to the next stage easy peasy. *Gain 1 Health*")
                 player.health += 1
             else:
-                action = input(f"Oh my, you've encountered a {monster.species} [H: {monster.health} / P: {monster.power} / S: {monster.speed} / W: {monster.wisdom}! Will you 'fight' or 'run'? ")
+                action = input(f"Oh my, you've encountered a {monster.species} [H: {monster.health} / P: {monster.power} / S: {monster.speed} / W: {monster.wisdom}]! Will you 'fight' or 'run'? ")
                 while action != 'fight' and action != 'run':
                     action = input("Please choose a valid option. Type 'fight' or 'run' to proceed. ")
                 if action == 'fight':
@@ -195,72 +171,38 @@ else:
                         print("Congratulations! You have defeated the monster and entered the next stage. *Gain 2 Health*")
                         player.health += 2
                         up_stats = 2
-                        while up_stats != 0:
-                            power_choice = input(f"How many points would you like to assign to power? [{up_stats} left] ")
-                            try: 
-                                number = int(power_choice)
-                                if number >= 0 and number <= up_stats:
-                                    up_stats -= number
-                                    player.power += number
+                        while up_stats > 0:
+                            for stat in ["Power","Speed","Wisdom"]:
+                                if up_stats == 0:
+                                    break
                                 else:
-                                    number = input(f"Please enter a number between 0 and {up_stats}. ")
-                                    up_stats -= number
-                                    player.power += number
-                            except:
-                                print("You have not entered a numerical value.")
-                                continue
-                            speed_choice = input(f"How many points would you like to assign to speed? [{up_stats} left] ")
-                            try: 
-                                number = int(speed_choice)
-                                if number >= 0 and number <= up_stats:
-                                    up_stats -= number
-                                    player.speed += number
-                                else:
-                                    number = input(f"Please enter a number between 0 and {up_stats}. ")
-                                    up_stats -= number
-                                    player.speed += number
-                            except:
-                                print("You have not entered a numerical value.")
-                                continue
-                            wisdom_choice = input(f"How many points would you like to assign to wisdom? [{up_stats} left] ")
-                            try: 
-                                number = int(wisdom_choice)
-                                if number >= 0 and number <= up_stats:
-                                    up_stats -= number
-                                    player.wisdom += number
-                                else:
-                                    number = input(f"Please enter a number between 0 and {up_stats}. ")
-                                    up_stats -= number
-                                    player.wisdom += number
-                            except:
-                                print("You have not entered a numerical value.")
-                                continue
+                                    try:
+                                        upgrade = int(input(f"Upgrade {stat} [{up_stats} left] "))
+                                        while upgrade > up_stats or upgrade < 0:
+                                            upgrade = int(input(f"You don't have that many upgrades. Upgrade {stat} [{up_stats} left] "))
+                                        player.upgrade(stat,upgrade)
+                                        up_stats -= upgrade
+                                    except:
+                                        print("You have not entered a numerical value.")
+                                        continue
                     elif player.wisdom > monster.wisdom:
                         print(f"Whew! You defeated the monster, but were injured. You've lost {round(monster.power/2)} health, but have entered the next stage and are rewarded with 2 upgrade points.")
                         player.health -= round(monster.power/2)
                         up_stats = 2
                         while up_stats > 0:
-                            try:
-                                power_choice = int(input("How many points would you like to assign to power? "))
-                                while power_choice > 0 and power_choice <= up_stats:
-                                    up_stats -= power_choice
-                                    player.power += power_choice
+                            for stat in ["Power","Speed","Wisdom"]:
                                 if up_stats == 0:
                                     break
-                                speed_choice = int(input("How many points would you like to assign to speed? "))
-                                while speed_choice > 0 and power_choice <= up_stats:
-                                    up_stats -= speed_choice
-                                    player.speed += speed_choice
-                                if up_stats == 0:
-                                    break
-                                wisdom_choice = int(input("How many points would you like to assign to wisdom? "))
-                                while wisdom_choice > 0 and power_choice <= up_stats:
-                                    up_stats -= wisdom_choice
-                                    player.wisdom += wisdom_choice
-                                if up_stats == 0:
-                                    break
-                            except:
-                                print("You have used your upgrade points")
+                                else:
+                                    try:
+                                        upgrade = int(input(f"Upgrade {stat} [{up_stats} left] "))
+                                        while upgrade > up_stats or upgrade < 0:
+                                            upgrade = int(input(f"You don't have that many upgrades. Upgrade {stat} [{up_stats} left] "))
+                                        player.upgrade(stat,upgrade)
+                                        up_stats -= upgrade
+                                    except:
+                                        print("You have not entered a numerical value.")
+                                        continue
                     else:
                         print("Oof, looks like you don't have the power or wisdom to defeat the monster.")
                         player.health = 0
