@@ -1,4 +1,5 @@
 import random
+import math
 
 class Player:
     def __init__(self, name, race, role):
@@ -8,7 +9,7 @@ class Player:
         self.stage = 0
         if race == 'Human':
             self.health = 6
-            self.power = 4
+            self.power = 1
             self.speed = 5
             self.wisdom = 5
         elif race == 'Dwarf':
@@ -167,45 +168,51 @@ else:
                 while action != 'fight' and action != 'run':
                     action = input("Please choose a valid option. Type 'fight' or 'run' to proceed. ")
                 if action == 'fight':
-                    if player.power > monster.power:
-                        print("Congratulations! You have defeated the monster and entered the next stage. *Gain 2 Health*")
-                        player.health += 2
-                        up_stats = 2
-                        while up_stats > 0:
-                            for stat in ["Power","Speed","Wisdom"]:
-                                if up_stats == 0:
-                                    break
-                                else:
-                                    try:
-                                        upgrade = int(input(f"Upgrade {stat} [{up_stats} left] "))
-                                        while upgrade > up_stats or upgrade < 0:
-                                            upgrade = int(input(f"You don't have that many upgrades. Upgrade {stat} [{up_stats} left] "))
-                                        player.upgrade(stat,upgrade)
-                                        up_stats -= upgrade
-                                    except:
-                                        print("You have not entered a numerical value.")
-                                        continue
-                    elif player.wisdom > monster.wisdom:
-                        print(f"Whew! You defeated the monster, but were injured. You've lost {round(monster.power/2)} health, but have entered the next stage and are rewarded with 2 upgrade points.")
-                        player.health -= round(monster.power/2)
-                        up_stats = 2
-                        while up_stats > 0:
-                            for stat in ["Power","Speed","Wisdom"]:
-                                if up_stats == 0:
-                                    break
-                                else:
-                                    try:
-                                        upgrade = int(input(f"Upgrade {stat} [{up_stats} left] "))
-                                        while upgrade > up_stats or upgrade < 0:
-                                            upgrade = int(input(f"You don't have that many upgrades. Upgrade {stat} [{up_stats} left] "))
-                                        player.upgrade(stat,upgrade)
-                                        up_stats -= upgrade
-                                    except:
-                                        print("You have not entered a numerical value.")
-                                        continue
-                    else:
+                    if (player.power > monster.power and player.wisdom < monster.wisdom) or (player.power == monster.power and player.wisdom > monster.wisdom):
+                        health_loss = math.ceil(0.25*monster.power)
+                    elif (player.power == monster.power and player.wisdom == monster.wisdom) or (player.power < monster.power and player.wisdom > monster.wisdom):
+                        health_loss = math.ceil(0.50*monster.power)
+                    elif (player.power == monster.power and player.wisdom < monster.wisdom) or (player.power < monster.power and player.wisdom == monster.wisdom):
+                        health_loss = math.ceil(0.75*monster.power)
+                        # up_stats = 2
+                        # while up_stats > 0:
+                        #     for stat in ["Power","Speed","Wisdom"]:
+                        #         if up_stats == 0:
+                        #             break
+                        #         else:
+                        #             try:
+                        #                 upgrade = int(input(f"Upgrade {stat} [{up_stats} left] "))
+                        #                 while upgrade > up_stats or upgrade < 0:
+                        #                     upgrade = int(input(f"You don't have that many upgrades. Upgrade {stat} [{up_stats} left] "))
+                        #                 player.upgrade(stat,upgrade)
+                        #                 up_stats -= upgrade
+                        #             except:
+                        #                 print("You have not entered a numerical value.")
+                        #                 continue
+                    elif player.power < monster.power and player.wisdom < monster.wisdom:
                         print("Oof, looks like you don't have the power or wisdom to defeat the monster.")
                         player.health = 0
+                    else:
+                        health_loss = 0
+                    player.health -= health_loss
+                    player.health += 2
+                    print(f"Congratulations! You have defeated the monster and taken {health_loss} damage. You are rewarded with 2 upgrades and regenerate 2 health.")
+                    up_stats = 2
+                    print("***Please choose how you'd like to upgrade your stats:")
+                    while up_stats > 0:
+                        for stat in ["Power","Speed","Wisdom"]:
+                            if up_stats == 0:
+                                break
+                            else:
+                                try:
+                                    upgrade = int(input(f"Upgrade {stat} [{up_stats} left] "))
+                                    while upgrade > up_stats or upgrade < 0:
+                                        upgrade = int(input(f"You don't have that many upgrades. Upgrade {stat} [{up_stats} left] "))
+                                    player.upgrade(stat,upgrade)
+                                    up_stats -= upgrade
+                                except:
+                                    print("You have not entered a numerical value.")
+                                    continue
                 else:
                     player.stage -= 1
                     if player.stage == 1:

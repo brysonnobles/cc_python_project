@@ -17,11 +17,18 @@ GAME FLOW:
     a. most paths will have monsters, but sometimes it may be a clear path
     b. each stage should have a random number of paths between 2-5
 5. When a player encounters a monster, they will have two options (fight, run)
-    a. if the player chooses to fight and has a higher power, they will defeat the monster
-    b. if the player chooses to fight and has a lower power, but higher wisdom, they will defeat the monster, but lose health equal to half the monster's power
-    c. if the player chooses to run and has a higher speed, they escape to the previous stage
-    d. if the player chooses to run and has a lower speed and higher wisdom, they lose health equal to half the monster's power, but escape to the previous stage
-    e. if the player chooses to run and has a lower speed and lower wisdom, they lose health equal to the monster's power, but escape to the previous stage
+    FIGHT 
+    1. IF: higher power & higher/equal wisdom, they will defeat, and lose zero health
+    2. IF: higher power & lesser wisdom OR: equal power & higher wisdom they will defeat, but lose health equal to a 25% of the monster's power
+    3. IF: equal power & equal wisdom OR: lesser power & higher wisdom: they will defeat, but lose health equal to 50% of the monster's power
+    4. IF: equal power & lesser wisdom OR: lesser power & equal wisdom: they will defeat, but lose health equal to 75% of the monster's power
+    5. if the player chooses to fight and has lower power and lower wisdom, they will be defeated
+    RUN
+    1. IF: higher speed & higher/equal wisdom, they will defeat, and lose zero health
+    2. IF: higher speed & lesser wisdom OR: equal speed & higher wisdom they will defeat, but lose health equal to a 25% of the monster's power
+    3. IF: equal speed & equal wisdom OR: lesser speed & higher wisdom: they will defeat, but lose health equal to 50% of the monster's power
+    4. IF: equal speed & lesser wisdom OR: lesser speed & equal wisdom: they will defeat, but lose health equal to 75% of the monster's power
+    5. IF: lesser speed & lesser wisdom, they will be defeated
 6. If a stage is cleared, the player has the option to increase 3-5 stat points however they'd like before moving to the next stage
     a. if a monster was killed, you can upgrade 3 stat points and regain 5 health
     b. if you clear a stage through an easy path, you can upgrade 2 stat points and gain 3 health
