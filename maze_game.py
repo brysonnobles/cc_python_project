@@ -146,6 +146,7 @@ player.stage += 1
 for stage, paths in maze.stages.items():
     paths = maze.display_paths(player.stage)
     options = len(paths)
+    next_stage = player.stage + 1
     if player.health <= 0:
         print("Unfortunately, you've been slain in the Maze of Monsters. Try again another day!")
         break
@@ -155,118 +156,120 @@ for stage, paths in maze.stages.items():
     elif player.stage > len(maze.stages):
         print("You have successfully completed the Maze of Monsters! Go to bed...")
     else:
-        stats = f"H: {player.health} / P: {player.power} / S: {player.speed} / W: {player.wisdom}"
-        print(f"~~~~~\nYou've made it to stage {player.stage} and your current stats are: {stats}")
-        print("~~~~~")
-        paths = maze.display_paths(player.stage)
-        #• Prompt for stage path splits
-        path_choice = input(f"You have stumbled upon a split in the maze. You must choose one of the following paths: {paths} ") 
-        while path_choice not in paths:
-            path_choice = input(f"Looks like you've tried to go down an imaginary path.\nPlease choose an option from the provided paths: {paths} ")
-        paths.pop(paths.index(path_choice))
-        options = len(paths)
+        while player.stage < next_stage:
+            stats = f"H: {player.health} / P: {player.power} / S: {player.speed} / W: {player.wisdom}"
+            print(f"~~~~~\nYou've made it to stage {player.stage} and your current stats are: {stats}")
+            print("~~~~~")
+            paths = maze.display_paths(player.stage)
+            #• Prompt for stage path splits
+            path_choice = input(f"You have stumbled upon a split in the maze. You must choose one of the following paths: {paths} ") 
+            while path_choice not in paths:
+                path_choice = input(f"Looks like you've tried to go down an imaginary path.\nPlease choose an option from the provided paths: {paths} ")
+            paths.pop(paths.index(path_choice))
+            options = len(paths)
 
-        #• Monster encounter after choosing a path
-        monster = Monster(player.stage)
-        if str(monster.species) == "['empty']":
-            print("~~~~~\nWow! You found a clear path and can move ahead to the next stage easy peasy.\nYou are rewarded with 1 upgrade and regenerate 1 health.")
-            if player.health != 10:
-                player.health += 1
-            player.stage += 1
-            up_stats = 1
-            print("~~~~~\nPlease choose how you'd like to upgrade your stats:")
-            while up_stats > 0:
-                for stat in ["Power","Speed","Wisdom"]:
-                    if up_stats == 0:
-                        break
-                    else:
-                        try:
-                            upgrade = int(input(f"Upgrade {stat} [{up_stats} left] "))
-                            while upgrade > up_stats or upgrade < 0:
-                                upgrade = int(input(f"You don't have that many upgrades. Upgrade {stat} [{up_stats} left] "))
-                            player.upgrade(stat,upgrade)
-                            up_stats -= upgrade
-                        except:
-                            print("You have not entered a numerical value.")
-                            continue
-        else:
-            action = input(f"~~~~~\nOh my, you've encountered a {str(monster.species)} [H: {monster.health} / P: {monster.power} / S: {monster.speed} / W: {monster.wisdom}]!\nWill you 'fight' or 'run'? ")
-            while action != 'fight' and action != 'run':
-                action = input("Please choose a valid option. Type 'fight' or 'run' to proceed. ")
-            if action == 'fight':
+            #• Monster encounter after choosing a path
+            monster = Monster(player.stage)
+            if str(monster.species) == "['empty']":
+                print("~~~~~\nWow! You found a clear path and can move ahead to the next stage easy peasy.\nYou are rewarded with 1 upgrade and regenerate 1 health.")
+                if player.health != 10:
+                    player.health += 1
                 player.stage += 1
-                if (player.power > monster.power and player.wisdom < monster.wisdom) or (player.power == monster.power and player.wisdom > monster.wisdom):
-                    health_loss = math.ceil(0.25*monster.power)
-                elif (player.power == monster.power and player.wisdom == monster.wisdom) or (player.power < monster.power and player.wisdom > monster.wisdom):
-                    health_loss = math.ceil(0.50*monster.power)
-                elif (player.power == monster.power and player.wisdom < monster.wisdom) or (player.power < monster.power and player.wisdom == monster.wisdom):
-                    health_loss = math.ceil(0.75*monster.power)
-                elif player.power < monster.power and player.wisdom < monster.wisdom:
-                    print("Oof, looks like you don't have the power or wisdom to defeat the monster.")
-                    player.health = 0
-                    continue
-                else:
-                    health_loss = 0
-                player.health -= health_loss
-                if player.health <= 0:
-                    continue
-                else:
-                    if player.health < 9:
-                        health_gain = 2 
-                    elif player.health == 9:
-                        health_gain = 1
-                    else:
-                        health_gain = 0
-                    print(f"~~~~~\nCongratulations! You have defeated the monster and taken {health_loss} damage.")
-                    if player.stage > len(maze.stages):
-                        print("You have successfully completed the Maze of Monsters! Go to bed...")
-                        break
-                    else:
-                        up_stats = 2
-                        print(f"~~~~~\nYou are rewarded with 2 upgrades and regenerate {health_gain} health.\nPlease choose how you'd like to upgrade your stats:")
-                        while up_stats > 0:
-                            for stat in ["Power","Speed","Wisdom"]:
-                                if up_stats == 0:
-                                    break
-                                else:
-                                    try:
-                                        upgrade = int(input(f"Upgrade {stat} [{up_stats} left] "))
-                                        while upgrade > up_stats or upgrade < 0:
-                                            upgrade = int(input(f"You don't have that many upgrades. Upgrade {stat} [{up_stats} left] "))
-                                        player.upgrade(stat,upgrade)
-                                        up_stats -= upgrade
-                                    except:
-                                        print("You have not entered a numerical value.")
-                                        continue
+                up_stats = 1
+                print("~~~~~\nPlease choose how you'd like to upgrade your stats:")
+                while up_stats > 0:
+                    for stat in ["Power","Speed","Wisdom"]:
+                        if up_stats == 0:
+                            break
+                        else:
+                            try:
+                                upgrade = int(input(f"Upgrade {stat} [{up_stats} left] "))
+                                while upgrade > up_stats or upgrade < 0:
+                                    upgrade = int(input(f"You don't have that many upgrades. Upgrade {stat} [{up_stats} left] "))
+                                player.upgrade(stat,upgrade)
+                                up_stats -= upgrade
+                            except:
+                                print("You have not entered a numerical value.")
+                                continue
             else:
-                print("~~~~~")
-                if player.stage == 1:
-                    if options == 0:
+                action = input(f"~~~~~\nOh my, you've encountered a {str(monster.species)} [H: {monster.health} / P: {monster.power} / S: {monster.speed} / W: {monster.wisdom}]!\nWill you 'fight' or 'run'? ")
+                while action != 'fight' and action != 'run':
+                    action = input("Please choose a valid option. Type 'fight' or 'run' to proceed. ")
+                if action == 'fight':
+                    player.stage += 1
+                    if (player.power > monster.power and player.wisdom < monster.wisdom) or (player.power == monster.power and player.wisdom > monster.wisdom):
+                        health_loss = math.ceil(0.25*monster.power)
+                    elif (player.power == monster.power and player.wisdom == monster.wisdom) or (player.power < monster.power and player.wisdom > monster.wisdom):
+                        health_loss = math.ceil(0.50*monster.power)
+                    elif (player.power == monster.power and player.wisdom < monster.wisdom) or (player.power < monster.power and player.wisdom == monster.wisdom):
+                        health_loss = math.ceil(0.75*monster.power)
+                    elif player.power < monster.power and player.wisdom < monster.wisdom:
+                        print("Oof, looks like you don't have the power or wisdom to defeat the monster.")
+                        player.health = 0
                         continue
                     else:
-                        if player.speed > monster.speed:
-                            print("You escaped to the previous stage! You'll need to choose a new path.")
-                        elif player.wisdom > monster.wisdom:
-                            print(f"You narrowly escaped to the previous stage, but lost {round(monster.power/2)} health in the process.")
-                            player.health -= round(monster.power/2)
-                        else:
-                            print(f"Somehow you escaped, but the monster did some damage and you lost {monster.power} health.")
-                            player.health -= monster.power
-                else:
-                    if options == 0:
-                        print("You coward! Go home...")
+                        health_loss = 0
+                    player.health -= health_loss
+                    if player.health <= 0:
+                        continue
                     else:
-                        if player.speed > monster.speed:
-                            print("You escaped to the previous stage! You'll need to choose a new path.")
-                        elif player.wisdom >= monster.wisdom:
-                            player.health -= round(monster.power/2)
-                            if player.health <= 0:
-                                continue
-                            else:
-                                print(f"You narrowly escaped to the previous stage, but lost {round(monster.power/2)} health in the process.")
+                        if player.health < 9:
+                            health_gain = 2 
+                        elif player.health == 9:
+                            health_gain = 1
                         else:
-                            player.health -= monster.power
-                            if player.health <= 0:
-                                continue
+                            health_gain = 0
+                        print(f"~~~~~\nCongratulations! You have defeated the monster and taken {health_loss} damage.")
+                        if player.stage > len(maze.stages):
+                            print("You have successfully completed the Maze of Monsters! Go to bed...")
+                            break
+                        else:
+                            up_stats = 2
+                            player.health += health_gain
+                            print(f"~~~~~\nYou are rewarded with 2 upgrades and regenerate {health_gain} health.\nPlease choose how you'd like to upgrade your stats:")
+                            while up_stats > 0:
+                                for stat in ["Power","Speed","Wisdom"]:
+                                    if up_stats == 0:
+                                        break
+                                    else:
+                                        try:
+                                            upgrade = int(input(f"Upgrade {stat} [{up_stats} left] "))
+                                            while upgrade > up_stats or upgrade < 0:
+                                                upgrade = int(input(f"You don't have that many upgrades. Upgrade {stat} [{up_stats} left] "))
+                                            player.upgrade(stat,upgrade)
+                                            up_stats -= upgrade
+                                        except:
+                                            print("You have not entered a numerical value.")
+                                            continue
+                else:
+                    print("~~~~~")
+                    if player.stage == 1:
+                        if options == 0:
+                            continue
+                        else:
+                            if player.speed > monster.speed:
+                                print("You escaped to the previous stage! You'll need to choose a new path.")
+                            elif player.wisdom > monster.wisdom:
+                                print(f"You narrowly escaped to the previous stage, but lost {round(monster.power/2)} health in the process.")
+                                player.health -= round(monster.power/2)
                             else:
                                 print(f"Somehow you escaped, but the monster did some damage and you lost {monster.power} health.")
+                                player.health -= monster.power
+                    else:
+                        if options == 0:
+                            print("You coward! Go home...")
+                        else:
+                            if player.speed > monster.speed:
+                                print("You escaped to the previous stage! You'll need to choose a new path.")
+                            elif player.wisdom >= monster.wisdom:
+                                player.health -= round(monster.power/2)
+                                if player.health <= 0:
+                                    continue
+                                else:
+                                    print(f"You narrowly escaped to the previous stage, but lost {round(monster.power/2)} health in the process.")
+                            else:
+                                player.health -= monster.power
+                                if player.health <= 0:
+                                    continue
+                                else:
+                                    print(f"Somehow you escaped, but the monster did some damage and you lost {monster.power} health.")
