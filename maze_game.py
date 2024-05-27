@@ -129,7 +129,6 @@ player = Player(player_name, player_race, player_role)
 # player.assign_race(player_race)
 # player.assign_role(player_role)
 player.stage = 0
-next_stage = 1
 options = 1
 maze = Maze()
 
@@ -147,7 +146,7 @@ player.stage += 1
 for stage, paths in maze.stages.items():
     paths = maze.display_paths(player.stage)
     options = len(paths)
-    if player.health == 0:
+    if player.health <= 0:
         print("Unfortunately, you've been slain in the Maze of Monsters. Try again another day!")
         break
     elif options == 0: 
@@ -157,15 +156,13 @@ for stage, paths in maze.stages.items():
         print("You have successfully completed the Maze of Monsters! Go to bed...")
     else:
         stats = f"H: {player.health} / P: {player.power} / S: {player.speed} / W: {player.wisdom}"
-        # player.stage = next_stage
         print(f"~~~~~\nYou've made it to stage {player.stage} and your current stats are: {stats}")
         print("~~~~~")
         paths = maze.display_paths(player.stage)
         #• Prompt for stage path splits
         path_choice = input(f"You have stumbled upon a split in the maze. You must choose one of the following paths: {paths} ") 
         while path_choice not in paths:
-            path_choice = input("Looks like you've tried to go down an imaginary path. Please choose an option from the provided paths above. ")
-        # next_stage += 1
+            path_choice = input(f"Looks like you've tried to go down an imaginary path.\nPlease choose an option from the provided paths: {paths} ")
         paths.pop(paths.index(path_choice))
         options = len(paths)
 
@@ -211,20 +208,22 @@ for stage, paths in maze.stages.items():
                 else:
                     health_loss = 0
                 player.health -= health_loss
-                if player.health == 0:
+                if player.health <= 0:
                     continue
                 else:
                     if player.health < 9:
-                        player.health += 2
+                        health_gain = 2 
                     elif player.health == 9:
-                        player.health += 1
-                    print(f"~~~~~\nCongratulations! You have defeated the monster and taken {health_loss} damage.\nYou are rewarded with 2 upgrades and regenerate 2 health.")
+                        health_gain = 1
+                    else:
+                        health_gain = 0
+                    print(f"~~~~~\nCongratulations! You have defeated the monster and taken {health_loss} damage.")
                     if player.stage > len(maze.stages):
                         print("You have successfully completed the Maze of Monsters! Go to bed...")
                         break
                     else:
                         up_stats = 2
-                        print("~~~~~\nPlease choose how you'd like to upgrade your stats:")
+                        print(f"~~~~~\nYou are rewarded with 2 upgrades and regenerate {health_gain} health.\nPlease choose how you'd like to upgrade your stats:")
                         while up_stats > 0:
                             for stat in ["Power","Speed","Wisdom"]:
                                 if up_stats == 0:
@@ -245,7 +244,6 @@ for stage, paths in maze.stages.items():
                     if options == 0:
                         continue
                     else:
-                        # player.stage -= 1
                         if player.speed > monster.speed:
                             print("You escaped to the previous stage! You'll need to choose a new path.")
                         elif player.wisdom > monster.wisdom:
@@ -255,11 +253,8 @@ for stage, paths in maze.stages.items():
                             print(f"Somehow you escaped, but the monster did some damage and you lost {monster.power} health.")
                             player.health -= monster.power
                 else:
-                    # player.stage -= 1
                     if options == 0:
-                        if player.stage == 1:
-                            print("You coward! Go home...")
-                        continue
+                        print("You coward! Go home...")
                     else:
                         if player.speed > monster.speed:
                             print("You escaped to the previous stage! You'll need to choose a new path.")
