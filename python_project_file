@@ -1,19 +1,36 @@
-This is where all of the lore and the ideas will be stored.
-
 RULES (in progress):
-> When a player enters the maze, they choose their name, race, and role, which defines their power/health
-> Races to choose from: Human, Dwarf, Elf
-> Roles to choose from: Wizard, Archer, Warrior
-> Stats max out at 10, if health reaches 0, you must restart
-> Must defeat 5 monsters along the way through 5 stages (or luckily get through the clear path)
+> You have four unique stats with a maximum of 10:
+>>> Health // This helps you survive throughout the maze
+>>> Power // This helps you defeat monsters in the maze
+>>> Speed // This helps you run away from powerful monsters
+>>> Wisdom // This helps you take less damage when fighting/running
+
+> There are three race options:
+>>> Human [Health: 5, Power: 3, Speed: 4, Wisdom: 4]
+>>> Dwarf [Health: 6, Power: 4, Speed: 2, Wisdom: 2]
+>>> Elf [Health: 4, Power: 2, Speed: 5, Wisdom: 5]
+
+> There are three role options:
+>>> Wizard [Power: +1, Speed: +1, Wisdom: +2]
+>>> Archer [Power: +1, Speed: +2, Wisdom: +1]
+>>> Warrior [Power: +2, Speed: +1, Wisdom: +1]
+
+> Each stage & path has the following options:
+>>> When the maze is entered, the entire maze structure is built out in the program
+>>> Each stage consists of 2-5 possible paths
+>>> Each path will have either a monster guarding it or it will be a clear path
+>>>>> Currently, there are 5 different monster types: rat, wolf, zombie, bear, dragon
+>>>>> The monster types don't differ in the stats that are provided them, it's solely a name
+>>> As you progress through the stages, the monsters get increasingly difficult in the following structure:
+>>>>> Each stat is randomly chosen with the following: 1+n to 5+n where n = current stage
+>>>>> So on stage 2, the monster will have stats between 3-7, but on stage 5, it will be 6-10
+>>> If you run away from a monster successfully, you are prompted to go down one of the remaining paths
+>>> If there are no paths left in the stage, you are considered a Coward!
 
 GAME FLOW:
 1. Choose a name, then a race and role which determines your skills & health
 2. Three main skills (power, speed, and wisdom) are calculated and health is established
     a. you should have the ability to check the status of your skills at any point by typing "stats" at any time
-3. The player must decide to enter the maze of monsters
-    a. upon entering the maze, the paths are created for each of the five stages
-    b. each stage should have a random number of paths between 2-5
 4. As the player proceeds through the maze, they choose their path for each stage
     a. most paths will have monsters, but sometimes it may be a clear path
 5. When a player encounters a monster, they will have two options (fight, run)
