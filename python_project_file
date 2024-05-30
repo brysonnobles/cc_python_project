@@ -22,8 +22,8 @@ RULES (in progress):
 >>>>> Currently, there are 5 different monster types: rat, wolf, zombie, bear, dragon
 >>>>> The monster types don't differ in the stats that are provided them, it's solely a name
 >>> As you progress through the stages, the monsters get increasingly difficult in the following structure:
->>>>> Each stat is randomly chosen with the following: 1+n to 5+n where n = current stage
->>>>> So on stage 2, the monster will have stats between 3-7, but on stage 5, it will be 6-10
+>>>>> Health & Power are randomly chosen with the following: 1+n to 4+n where n = current stage
+>>>>> Speed & Wisdom are randomly chosen with the following: 2+n to 5+n where n = current stage
 >>> If you run away from a monster successfully, you are prompted to go down one of the remaining paths
 >>> If there are no paths left in the stage, you are considered a Coward!
 

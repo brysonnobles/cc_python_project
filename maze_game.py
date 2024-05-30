@@ -55,16 +55,29 @@ class Player:
 class Monster:
     def __init__(self, stage):
         self.species = str(random.choices(species_list, weights = species_weights, k = 1))
+        # if stage < 3:
+        #     low = 1
+        #     high = 3
+        # elif stage > 3:
+        #     low = 3
+        #     high = 5
+        # else:
+        #     low = 2
+        #     high = 4
         if self.species == "empty":
             self.health = 0
             self.power = 0
             self.speed = 0
             self.wisdom = 0
         else:
-            self.health = random.randint(1+stage, 5+stage)
-            self.power = random.randint(1+stage, 5+stage)
-            self.speed = random.randint(1+stage, 5+stage)
-            self.wisdom = random.randint(1+stage, 5+stage)
+                # self.health = random.randint(low+stage, high+stage)
+                # self.power = random.randint(low+stage, high+stage)
+                # self.speed = random.randint(low+stage, high+stage)
+                # self.wisdom = random.randint(low+stage, high+stage)
+                self.health = random.randint(1+stage, 4+stage)
+                self.power = random.randint(1+stage, 4+stage)
+                self.speed = random.randint(2+stage, 5+stage)
+                self.wisdom = random.randint(2+stage, 5+stage)
 
 class Maze:
     def __init__(self):
@@ -174,7 +187,6 @@ for stage, paths in maze.stages.items():
                     player.stat_check()
             paths.pop(paths.index(path_choice))
             options = len(paths)
-            print(options)
 
             #• Monster encounter after choosing a path
             monster = Monster(player.stage)
@@ -183,6 +195,8 @@ for stage, paths in maze.stages.items():
                 if player.health != 10:
                     player.health += 1
                 player.stage += 1
+                if player.stage > len(maze.stages):
+                    break
                 up_stats = 1
                 print("~~~~~\nPlease choose how you'd like to upgrade your stats:")
                 while up_stats > 0:
