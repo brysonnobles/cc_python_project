@@ -174,6 +174,7 @@ for stage, paths in maze.stages.items():
                     player.stat_check()
             paths.pop(paths.index(path_choice))
             options = len(paths)
+            print(options)
 
             #• Monster encounter after choosing a path
             monster = Monster(player.stage)
@@ -264,7 +265,7 @@ for stage, paths in maze.stages.items():
                     print("~~~~~")
                     if player.stage == 1:
                         if options == 0:
-                            continue
+                            break
                         else:
                             if player.speed > monster.speed:
                                 print("You escaped to the previous stage! You'll need to choose a new path.")
@@ -283,12 +284,12 @@ for stage, paths in maze.stages.items():
                             elif player.wisdom >= monster.wisdom:
                                 player.health -= round(monster.power/2)
                                 if player.health <= 0:
-                                    continue
+                                    break
                                 else:
                                     print(f"You narrowly escaped to the previous stage, but lost {round(monster.power/2)} health in the process.")
                             else:
                                 player.health -= monster.power
                                 if player.health <= 0:
-                                    continue
+                                    break
                                 else:
                                     print(f"Somehow you escaped, but the monster did some damage and you lost {monster.power} health.")
