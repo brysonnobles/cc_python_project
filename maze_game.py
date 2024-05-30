@@ -49,6 +49,9 @@ class Player:
                 self.wisdom += value
         except:
             print("cannot exceed maximum of 10")
+    
+    def stat_check(self):
+        print(f"H: {player.health} / P: {player.power} / S: {player.speed} / W: {player.wisdom}")
 class Monster:
     def __init__(self, stage):
         self.species = str(random.choices(species_list, weights = species_weights, k = 1))
@@ -162,9 +165,13 @@ for stage, paths in maze.stages.items():
             print("~~~~~")
             paths = maze.display_paths(player.stage)
             #• Prompt for stage path splits
-            path_choice = input(f"You have stumbled upon a split in the maze. You must choose one of the following paths: {paths} ") 
+            path_choice = input(f"You have stumbled upon a split in the maze. You must choose one of the following paths: {paths} ")
+            if path_choice == 'stats':
+                player.stat_check()
             while path_choice not in paths:
                 path_choice = input(f"Looks like you've tried to go down an imaginary path.\nPlease choose an option from the provided paths: {paths} ")
+                if path_choice == 'stats':
+                    player.stat_check()
             paths.pop(paths.index(path_choice))
             options = len(paths)
 
@@ -184,8 +191,12 @@ for stage, paths in maze.stages.items():
                         else:
                             try:
                                 upgrade = int(input(f"Upgrade {stat} [{up_stats} left] "))
+                                if path_choice == 'stats':
+                                    player.stat_check()
                                 while upgrade > up_stats or upgrade < 0:
                                     upgrade = int(input(f"You don't have that many upgrades. Upgrade {stat} [{up_stats} left] "))
+                                    if path_choice == 'stats':
+                                        player.stat_check()
                                 player.upgrade(stat,upgrade)
                                 up_stats -= upgrade
                             except:
@@ -193,8 +204,12 @@ for stage, paths in maze.stages.items():
                                 continue
             else:
                 action = input(f"~~~~~\nOh my, you've encountered a {str(monster.species)} [H: {monster.health} / P: {monster.power} / S: {monster.speed} / W: {monster.wisdom}]!\nWill you 'fight' or 'run'? ")
+                if path_choice == 'stats':
+                    player.stat_check()
                 while action != 'fight' and action != 'run':
                     action = input("Please choose a valid option. Type 'fight' or 'run' to proceed. ")
+                    if path_choice == 'stats':
+                        player.stat_check()
                 if action == 'fight':
                     player.stage += 1
                     if (player.power > monster.power and player.wisdom < monster.wisdom) or (player.power == monster.power and player.wisdom > monster.wisdom):
@@ -234,8 +249,12 @@ for stage, paths in maze.stages.items():
                                     else:
                                         try:
                                             upgrade = int(input(f"Upgrade {stat} [{up_stats} left] "))
+                                            if path_choice == 'stats':
+                                                player.stat_check()
                                             while upgrade > up_stats or upgrade < 0:
                                                 upgrade = int(input(f"You don't have that many upgrades. Upgrade {stat} [{up_stats} left] "))
+                                                if path_choice == 'stats':
+                                                    player.stat_check()
                                             player.upgrade(stat,upgrade)
                                             up_stats -= upgrade
                                         except:
