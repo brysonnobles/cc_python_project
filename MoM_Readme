@@ -49,6 +49,6 @@ GAME FLOW:
 6. When a stage is cleared:
     a. if you kill the monster and lose 0% health, you can upgrade 3 stats and regain 2 health
     b. if you kill a monster, but lose health, you can upgrade 2 stat points and regain 3 health
-    c. if you clear a stage through an easy path, you can upgrade 1 stat points and gain 1 health
+    c. if you clear a stage through an easy path, you can upgrade 2 stat points and gain 1 health
 7. After all 5 stages are completed, the player will exit the maze and complete the game successfully
     

@@ -307,14 +307,18 @@ for stage, paths in maze.stages.items():
                             elif player.wisdom >= monster.wisdom:
                                 player.health -= round(monster.power/2)
                                 if player.health <= 0:
-                                    print("Unfortunately, you've been slain in the Maze of Monsters. Try again another day!")
-                                    break
+                                    if player.stage == len(maze.stages):
+                                        print("Unfortunately, you've been slain in the Maze of Monsters. Try again another day!")
+                                    else:
+                                        break
                                 else:
                                     print(f"You narrowly escaped to the previous stage, but lost {round(monster.power/2)} health in the process.")
                             else:
                                 player.health -= monster.power
                                 if player.health <= 0:
-                                    print("Unfortunately, you've been slain in the Maze of Monsters. Try again another day!")
-                                    break
+                                    if player.stage == len(maze.stages):
+                                        print("Unfortunately, you've been slain in the Maze of Monsters. Try again another day!")
+                                    else:
+                                        break
                                 else:
                                     print(f"Somehow you escaped, but the monster did some damage and you lost {monster.power} health.")
