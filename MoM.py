@@ -247,7 +247,7 @@ for stage, paths in maze.stages.items():
                         else:
                             break
                     else:
-                        if player.health == 7:
+                        if player.health <= 7:
                             health_gain = 3 
                         elif player.health == 8:
                             health_gain = 2
