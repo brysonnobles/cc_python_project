@@ -109,8 +109,9 @@ stat_info = '''
 You have four unique stats with a maximum of 10:
 Health // This helps you survive throughout the maze
 Power // This helps you defeat monsters in the maze
-Speed // This helps you run away from powerful monsters
-Wisdom // This helps you take less damage when fighting/running'''
+Speed // This helps you run away from monsters
+Wisdom // This helps you take less damage from monsters
+***Type "stats" at any point during the run to check your stats'''
 race_info = '''
 There are three race options:
 Human [Health: 5, Power: 3, Speed: 4, Wisdom: 4]
