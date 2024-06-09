@@ -34,13 +34,13 @@ GAME FLOW:
 4. As the player proceeds through the maze, they choose their path for each stage
     a. most paths will have monsters, but sometimes it may be a clear path
 5. When a player encounters a monster, they will have two options (fight, run)
-    >>>FIGHT 
+    > FIGHT 
     1. IF: higher power & higher wisdom >> you will defeat the monster and lose 0% health
     2. IF: equal power & higher wisdom OR: lesser power & higher wisdom >> you will defeat, but lose health equal to 25% of the monster's power
     3. IF: equal power & equal wisdom OR: higher power & equal/lesser wisdom >> you will defeat, but lose health equal to 50% of the monster's power
     4. IF: equal power & lesser wisdom OR: lesser power & equal wisdom >> you will defeat, but lose health equal to 75% of the monster's power
     5. IF: lesser power & lesser wisdom >> you will be defeated
-    >>>RUN
+    > RUN
     1. IF: higher speed & higher/equal wisdom >> you will defeat the monster and lose 0% health
     2. IF: higher speed & lesser wisdom OR: equal speed & higher wisdom >> you will defeat, but lose health equal to 25% of the monster's power
     3. IF: equal speed & equal wisdom OR: lesser speed & higher wisdom >> you will defeat, but lose health equal to 50% of the monster's power
